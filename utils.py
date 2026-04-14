@@ -12,33 +12,11 @@ MOVE_RIGHT = (1, 0)
 
 
 def is_free_to_move(map, move):
-    """
-    Check whether a target position is empty and can be moved into.
-
-    Args:
-        map: Matrix (list of lists) representing the board.
-        move: Position as (x, y), where x is horizontal and y is vertical.
-
-    Returns:
-        bool: True if the target cell is empty (None), False otherwise.
-    """
-
     x,y = move
     return map[y][x] == OBJECT_EMPTY 
 
 
 def is_valid_move(map, move):
-    """
-    Check whether a position is inside the matrix boundaries.
-
-    Args:
-        map: Matrix (list of lists) representing the board.
-        move: Position as (x, y), where x is horizontal and y is vertical.
-
-    Returns:
-        bool: True if the position is within bounds, False otherwise.
-    """
-
     x,y = move
     rowsCount = len(map)
     columnsCount = len(map[0])
@@ -46,16 +24,6 @@ def is_valid_move(map, move):
         
         
 def find_objects(map, target_object_symbol):        
-    """
-    Find all coordinates where a given object symbol appears.
-
-    Args:
-        map: Matrix (list of lists) representing the board.
-        target_object_symbol: Symbol to search for (None, 🏠, or 🏥).
-
-    Returns:
-        list[tuple[int, int]]: All matching coordinates as (x, y).
-    """
     res = []
     rowsCount = len(map)
     columnsCount = len(map[0])
@@ -68,18 +36,6 @@ def find_objects(map, target_object_symbol):
     return res
 
 def result(map, hospital_coordinates, target_move):
-    """
-    Create and return a new map after moving one hospital to a target position.
-
-    Args:
-        map: Matrix (list of lists) representing the board.
-        hospital_coordinates: Current hospital position as (x, y).
-        target_move: Destination position as (x, y).
-
-    Returns:
-        list[list]: A deep-copied map with the move applied.
-    """
-
     newMap = copy.deepcopy(map)
     oldX, oldY = hospital_coordinates
     newX, newY = target_move
@@ -90,16 +46,6 @@ def result(map, hospital_coordinates, target_move):
 
 
 def manhattan(pos, pos_2):
-    """
-    Compute the Manhattan distance between two coordinates.
-
-    Args:
-        pos: First coordinate as (x, y).
-        pos_2: Second coordinate as (x, y).
-
-    Returns:
-        int: Distance computed as abs(x2 - x1) + abs(y2 - y1).
-    """
     x1,y1 = pos
     x2,y2 = pos_2 
     return abs(y2-y1) + abs(x2-x1)
@@ -115,6 +61,15 @@ def cost(map):
     Returns:
         int: Total Manhattan-distance cost.
     """
+    hospitals = find_objects(map, OBJECT_HOSPITAL)
+    houses = find_objects(map, OBJECT_HOUSE)
+    total_cost = 0
+    
+    for hospital in hospitals:
+        for house in houses:
+            total_cost += manhattan(hospital, house)
+    
+    return total_cost
     
 
 
@@ -156,3 +111,10 @@ def actions(map, hospital_position):
             res.append(movement)
     return res
         
+def movable_hospitals(map):
+    res = []
+    hospitals = find_objects(map, OBJECT_HOSPITAL)
+    for hospital in hospitals:
+        if len(actions(map, hospital)) > 0:
+            res.append(hospital)
+    return res

@@ -1,3 +1,6 @@
+import math
+import random
+
 import utils
 
 
@@ -15,32 +18,29 @@ def simulated_annealing(grid, T_min, T_initial, cooling_rate):
     Returns:
         list[list]: A grid configuration produced by the annealing search.
     """
+    current_grid = grid
+    current_cost = utils.cost(current_grid)
+    temperature = T_initial
+    while temperature > T_min:
+        movable_hospitals = utils.movable_hospitals(current_grid)
+        if len(movable_hospitals) == 0:
+            break
+        selected_hospital = random.choice(movable_hospitals)
+        posible_moves = utils.actions(current_grid, selected_hospital)
+        selected_move = random.choice(posible_moves)
+        neighbor_solution = utils.result(current_grid, selected_hospital, selected_move)
+        neighbor_cost = utils.cost(neighbor_solution)
+        cost_difference = neighbor_cost - current_cost
+        if cost_difference < 0:
+            current_grid = neighbor_solution
+            current_cost = neighbor_cost
+        else:
+            acceptance_probability = math.exp(-cost_difference / temperature)
+            random_value = random.random()
+            if random_value < acceptance_probability:
+                current_grid = neighbor_solution
+                current_cost = neighbor_cost
+        temperature *= cooling_rate
+    return current_grid
 
-    # current grid <- grid
-    # current cost <- cost of the grid
-    # temperature <- initial temperature
-
-    # while temperature is greater than the minimum temperature
-    #     movable hospitals <- hospitals that can move
-
-    #     if movable hospitals is empty
-    #         stop the process
-
-    #     selected hospital <- a random movable hospital
-    #     possible moves <- valid moves for that hospital
-    #     selected move <- a random move
-    #     neighbor solution <- new grid produced by that move
-    #     neighbor cost <- cost of the neighbor solution
-    #     cost difference <- neighbor cost - current cost
-
-    #     if the neighbor is better
-    #         accept the neighbor as the current solution
-    #     otherwise
-    #         acceptance probability <- value based on cost difference and temperature
-
-    #         random value <- random number between 0 and 1
-    #         if random value is less than the acceptance probability
-    #             accept the neighbor as the current solution
-
-    #     temperature <- temperature reduced by the cooling rate
-    # return current grid
+    
