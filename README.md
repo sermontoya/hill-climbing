@@ -2,24 +2,46 @@
 
 A hill climbing implementation for hospital placement optimization. The algorithm searches neighboring states and iteratively improves the map cost until reaching a local optimum.
 
-## Functions
+---
 
-### utils.py
+# Functions
 
-- `is_free_to_move(map, move)` - Checks if a target position is empty
-- `is_valid_move(map, move)` - Checks if a position is inside map boundaries
-- `find_objects(map, target_object_symbol)` - Returns coordinates of all matching objects
-- `result(map, hospital_coordinates, target_move)` - Returns a new map after moving a hospital
-- `manhattan(pos, pos_2)` - Computes Manhattan distance between two coordinates
-- `cost(map)` - Returns total map cost (sum of hospital-house Manhattan distances)
-- `move(pos, pos_2)` - Adds two coordinate tuples component-wise
-- `actions(map, hospital_position)` - Returns all valid adjacent moves for a hospital
+## `utils.py`
 
-### hc.py
+- `is_free_to_move(map, move)`  
+  Checks if a target position is empty.
 
-- `hill_climbing(map)` - Optimizes hospital positions using hill climbing until no better neighbor is found
+- `is_valid_move(map, move)`  
+  Checks if a position is inside map boundaries.
 
-## Installation
+- `find_objects(map, target_object_symbol)`  
+  Returns coordinates of all matching objects.
+
+- `result(map, hospital_coordinates, target_move)`  
+  Returns a new map after moving a hospital.
+
+- `manhattan(pos, pos_2)`  
+  Computes Manhattan distance between two coordinates.
+
+- `cost(map)`  
+  Returns the total map cost (sum of hospital-house Manhattan distances).
+
+- `move(pos, pos_2)`  
+  Adds two coordinate tuples component-wise.
+
+- `actions(map, hospital_position)`  
+  Returns all valid adjacent moves for a hospital.
+
+---
+
+## `hc.py`
+
+- `hill_climbing(map)`  
+  Optimizes hospital positions using hill climbing until no better neighbor is found.
+
+---
+
+# Installation
 
 Install the required dependencies:
 
@@ -27,84 +49,118 @@ Install the required dependencies:
 pip install -r requirements.txt
 ```
 
-## Run the Algorithm
+---
 
-### Quick run (default map)
+# Run the Visualizer
 
-This project includes a sample map in `main.py`. Run it with:
+This project includes an interactive visual interface built with Pygame.
 
-Windows:
+The application displays:
+
+- The map grid with hospitals and houses
+- Animated hill climbing optimization steps
+- Current and initial cost values
+- Cost evolution chart
+- Optimization status and statistics
+
+---
+
+## Windows
 
 ```bash
 python main.py
 ```
 
-Linux/macOS:
+---
+
+## Linux/macOS
 
 ```bash
 python3 main.py
 ```
 
-The script prints:
+---
 
-1. The original map.
-2. The optimized map after applying the hill-climbing algorithm.
+# Changing the Map
 
-### Run with your own map (Python snippet)
+To use a different matrix, modify the `INITIAL_MAP` variable inside `main.py`.
+
+Example:
 
 ```python
-import hc
-import utils
-from tabulate import tabulate
-
-custom_map = [
+INITIAL_MAP = [
     [None, None, utils.OBJECT_HOSPITAL, None],
     [utils.OBJECT_HOUSE, None, None, None],
     [None, None, None, utils.OBJECT_HOUSE],
 ]
-
-solved_map = hc.hill_climbing(custom_map)
-print(tabulate(solved_map, tablefmt="grid", floatfmt=".2f"))
 ```
 
-## Testing
+Available objects:
 
-### Windows
+- `utils.OBJECT_HOSPITAL` → Hospital
+- `utils.OBJECT_HOUSE` → House
+- `None` → Empty space
+
+---
+
+# Controls
+
+- **Run Hill Climbing** → Starts the optimization animation
+- **Reset** → Restores the initial map
+- **ESC** or **Q** → Exit the application
+
+---
+
+# Default Map
+
+The visualizer starts with a predefined map where:
+
+- Hospitals are movable
+- Houses are fixed
+- The algorithm minimizes the total Manhattan distance between hospitals and houses
+
+---
+
+# Testing
+
+## Windows
 
 Use `python -m pytest` on Windows.
 
-Run all tests:
+### Run all tests
 
 ```bash
 python -m pytest
 ```
 
-Run a specific test file:
+### Run a specific test file
 
 ```bash
 python -m pytest tests/test_utils.py
 python -m pytest tests/test_hill_climbing.py
 ```
 
-Run a specific test function:
+### Run a specific test function
 
 ```bash
 python -m pytest tests/test_utils.py::test_function_name
 ```
 
-Run tests matching a pattern:
+### Run tests matching a pattern
 
 ```bash
 python -m pytest -k "test_name"
 ```
 
-Run without coverage (faster):
+### Run without coverage (faster)
 
 ```bash
 python -m pytest --no-cov
 ```
 
-### Linux/macOS
+---
+
+## Linux/macOS
 
 You can run tests with:
 
@@ -112,7 +168,9 @@ You can run tests with:
 pytest
 ```
 
-## Contributing
+---
+
+# Contributing
 
 Short contributions are welcome and appreciated.
 
